@@ -34,6 +34,7 @@ namespace NFine.Application.SystemManage
             }
             expression = expression.And(t => t.F_Account != "admin");
             var list = service.FindList(expression, pagination);
+            AutoMapper.Mapper.Initialize(t=>t.CreateMap<UserEntity, UserExcelOutPut>());
             return AutoMapper.Mapper.Map<List<UserExcelOutPut>>(list);
         }
 
@@ -48,6 +49,7 @@ namespace NFine.Application.SystemManage
             }
             expression = expression.And(t => t.F_Account != "admin");
             var list = service.IQueryable(expression).ToList();
+            AutoMapper.Mapper.Initialize(t => t.CreateMap<UserEntity, UserExcelOutPut>());
             return AutoMapper.Mapper.Map<List<UserExcelOutPut>>(list);
         }
         #endregion

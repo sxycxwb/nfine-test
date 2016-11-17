@@ -15,6 +15,7 @@ using System.Data;
 using System.IO;
 using System.Linq;
 using System.Web.Mvc;
+using System.Web.WebSockets;
 using NFine.Code.Excel;
 
 
@@ -30,20 +31,29 @@ namespace NFine.Web.Areas.SystemManage.Controllers
         /// <summary>
         /// 获得导出的url并导出
         /// </summary>
-        /// <param name="ExportTypeIndex">导出EXCEL类型索引</param>
-        /// <returns>URL提供用户下载</returns>
-        public FileResult GetExportExcelUrl(int ExportTypeIndex)
+        /// <param name="pagination">分页</param>
+        /// <param name="keyword">条件</param>
+        /// <returns></returns>
+        public FileResult GetExportExcelUrl(Pagination pagination, string keyword)
         {
-            var list = userApp.GetExcelList();
+            var list = new List<UserExcelOutPut>();
+            if (pagination.rows == 0 && pagination.page == 0)
+            {
+                list = userApp.GetExcelList();
+            }
+            else
+            {
+                list = userApp.GetExcelList(pagination);
+            }
             //类型转换（将List转化为DataTable）
-            var exportDt = list.ToDataTable<UserExcelOutPut>();
+            var exportDt=list.ToDataTable(rec => new object[] { list });
             var excelTitle = "用户数据";
             var rootPath = AppDomain.CurrentDomain.BaseDirectory;
-            rootPath = Path.Combine(rootPath,"DownLoad", "Excel", "User");
+            rootPath = Path.Combine(rootPath, "DownLoad", "Excel", "User");
             var fileName = "用户数据.xlsx";
             var realFilePath = Path.Combine(rootPath, fileName);
             new NPOIExcel().ToExcel<UserExcelOutPut>(exportDt, realFilePath, excelTitle);
-            return new FilePathResult(realFilePath, "application/vnd.ms-excel");
+            return File(realFilePath, "application/vnd.ms-excel", fileName);
         }
 
         #endregion

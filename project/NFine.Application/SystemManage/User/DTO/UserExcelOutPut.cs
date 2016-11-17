@@ -15,8 +15,6 @@ namespace NFine.Application.SystemManage.User.DTO
         public string F_RealName { get; set; }
         [Description("昵称")]
         public string F_NickName { get; set; }
-        [Description("性别")]
-        public bool? F_Gender { get; set; }
         [Description("生日")]
         public DateTime? F_Birthday { get; set; }
         [Description("手机")]
