@@ -4,12 +4,15 @@
  * Description: NFine快速开发平台
  * Website：http://www.nfine.cn
 *********************************************************************************/
+
+using System;
 using NFine.Application.SystemManage;
 using NFine.Application.SystemManage.User.DTO;
 using NFine.Code;
 using NFine.Domain.Entity.SystemManage;
 using System.Collections.Generic;
 using System.Data;
+using System.IO;
 using System.Linq;
 using System.Web.Mvc;
 using NFine.Code.Excel;
@@ -35,9 +38,12 @@ namespace NFine.Web.Areas.SystemManage.Controllers
             //类型转换（将List转化为DataTable）
             var exportDt = list.ToDataTable<UserExcelOutPut>();
             var excelTitle = "用户数据";
-            var path = "";
-            new NPOIExcel().ToExcel<UserExcelOutPut>(exportDt, "", excelTitle);
-            return new FilePathResult(path, "application/vnd.ms-excel");
+            var rootPath = AppDomain.CurrentDomain.BaseDirectory;
+            rootPath = Path.Combine(rootPath,"DownLoad", "Excel", "User");
+            var fileName = "用户数据.xlsx";
+            var realFilePath = Path.Combine(rootPath, fileName);
+            new NPOIExcel().ToExcel<UserExcelOutPut>(exportDt, realFilePath, excelTitle);
+            return new FilePathResult(realFilePath, "application/vnd.ms-excel");
         }
 
         #endregion
