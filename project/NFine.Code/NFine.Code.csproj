@@ -79,6 +79,7 @@
     <Compile Include="Configs\DBConnection.cs" />
     <Compile Include="Excel\ExcelHelper.cs" />
     <Compile Include="Excel\NPOIExcel.cs" />
+    <Compile Include="Extend\Ext.DataTable.cs" />
     <Compile Include="Extend\Ext.Convert.cs" />
     <Compile Include="Extend\Ext.DateTime.cs" />
     <Compile Include="Extend\Ext.Format.cs" />

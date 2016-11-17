@@ -5,11 +5,14 @@
  * Website：http://www.nfine.cn
 *********************************************************************************/
 using NFine.Application.SystemManage;
+using NFine.Application.SystemManage.User.DTO;
 using NFine.Code;
 using NFine.Domain.Entity.SystemManage;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Web.Mvc;
+using NFine.Code.Excel;
 
 
 namespace NFine.Web.Areas.SystemManage.Controllers
@@ -18,6 +21,26 @@ namespace NFine.Web.Areas.SystemManage.Controllers
     {
         private UserApp userApp = new UserApp();
         private UserLogOnApp userLogOnApp = new UserLogOnApp();
+
+        #region Excel导入、导出
+
+        /// <summary>
+        /// 获得导出的url并导出
+        /// </summary>
+        /// <param name="ExportTypeIndex">导出EXCEL类型索引</param>
+        /// <returns>URL提供用户下载</returns>
+        public FileResult GetExportExcelUrl(int ExportTypeIndex)
+        {
+            var list = userApp.GetExcelList();
+            //类型转换（将List转化为DataTable）
+            var exportDt = list.ToDataTable<UserExcelOutPut>();
+            var excelTitle = "用户数据";
+            var path = "";
+            new NPOIExcel().ToExcel<UserExcelOutPut>(exportDt, "", excelTitle);
+            return new FilePathResult(path, "application/vnd.ms-excel");
+        }
+
+        #endregion
 
         [HttpGet]
         [HandlerAjaxOnly]

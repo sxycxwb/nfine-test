@@ -4,16 +4,45 @@
  * Description: NFine快速开发平台
  * Website：http://www.nfine.cn
 *********************************************************************************/
+
+using System;
+using System.Collections.Generic;
 using NFine.Code;
 using NFine.Data;
 using NFine.Domain.Entity.SystemManage;
 using NFine.Domain.IRepository.SystemManage;
 using NFine.Repository.SystemManage;
+using NFine.Domain;
 
 namespace NFine.Repository.SystemManage
 {
+
+
     public class UserRepository : RepositoryBase<UserEntity>, IUserRepository
     {
+        /// <summary>
+        /// 批量提交
+        /// </summary>
+        /// <param name="list"></param>
+        public void BatchSumitForm(List<UserEntity> list)
+        {
+            using (var db = new RepositoryBase().BeginTrans())
+            {
+                #region 初始化
+                foreach (var user in list)
+                {
+                    user.F_Id = Common.GuId();
+                    var LoginInfo = OperatorProvider.Provider.GetCurrent();
+                    if (LoginInfo != null)
+                        user.F_CreatorUserId = LoginInfo.UserId;
+                    user.F_CreatorTime = DateTime.Now;
+                } 
+                #endregion
+                db.Insert(list);
+                db.Commit();
+            }
+        }
+
         public void DeleteForm(string keyValue)
         {
             using (var db = new RepositoryBase().BeginTrans())

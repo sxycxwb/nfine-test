@@ -3,3 +3,18 @@
 ################################################################################
 
 /project/.vs/NFine.Framework/v14/.suo
+/project/NFine.Application/bin/Debug
+/project/NFine.Application/obj/Debug
+/project/NFine.Code/bin/Debug
+/project/NFine.Code/obj/Debug
+/project/NFine.Data/bin/Debug
+/project/NFine.Data/obj/Debug
+/project/NFine.Domain/bin/Debug
+/project/NFine.Domain/obj/Debug
+/project/NFine.Mapping/bin/Debug
+/project/NFine.Mapping/obj/Debug
+/project/NFine.Repository/bin/Debug
+/project/NFine.Repository/obj/Debug
+/project/NFine.Web/bin
+/project/NFine.Web/obj/Debug
+/project/packages

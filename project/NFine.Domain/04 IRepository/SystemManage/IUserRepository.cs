@@ -4,6 +4,8 @@
  * Description: NFine快速开发平台
  * Website：http://www.nfine.cn
 *********************************************************************************/
+
+using System.Collections.Generic;
 using NFine.Data;
 using NFine.Domain.Entity.SystemManage;
 
@@ -11,6 +13,11 @@ namespace NFine.Domain.IRepository.SystemManage
 {
     public interface IUserRepository : IRepositoryBase<UserEntity>
     {
+        /// <summary>
+        /// 批量提交
+        /// </summary>
+        /// <param name="list"></param>
+        void BatchSumitForm(List<UserEntity> list);
         void DeleteForm(string keyValue);
         void SubmitForm(UserEntity userEntity, UserLogOnEntity userLogOnEntity, string keyValue);
     }
