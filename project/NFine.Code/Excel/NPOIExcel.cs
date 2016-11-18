@@ -38,7 +38,7 @@ namespace NFine.Code.Excel
                 var v = (DescriptionAttribute[])item.GetCustomAttributes(typeof(DescriptionAttribute), false);
                 var descriptionName = v[0].Description;
                 var fieldName = item.Name;
-                dic.Add(fieldName,descriptionName);
+                dic.Add(fieldName, descriptionName);
             }
 
             #endregion
@@ -87,6 +87,14 @@ namespace NFine.Code.Excel
         /// <returns></returns>
         private bool ToExcel(DataTable table)
         {
+            #region 文件夹判断
+            var rootPath = _filePath.Substring(0, _filePath.LastIndexOf('\\') + 1);
+            if (!Directory.Exists(rootPath))
+            {
+                Directory.CreateDirectory(rootPath); //不存在就创建文件夹
+            }
+            #endregion
+
             FileStream fs = new FileStream(this._filePath, FileMode.OpenOrCreate, FileAccess.ReadWrite);
             IWorkbook workBook = new HSSFWorkbook();
             this._sheetName = this._sheetName.IsEmpty() ? "sheet1" : this._sheetName;
@@ -159,7 +167,7 @@ namespace NFine.Code.Excel
         /// <param name="title">Excel标题</param>
         /// <param name="sheetName"></param>
         /// <returns></returns>
-        public bool ToExcel<T>(DataTable table, string filePath, string title = "", string sheetName="") where T : class, new()
+        public bool ToExcel<T>(DataTable table, string filePath, string title = "", string sheetName = "") where T : class, new()
         {
             this._title = title;
             this._sheetName = sheetName;

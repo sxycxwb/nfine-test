@@ -62,6 +62,24 @@
             ],
             pager: "#gridPager",
             sortname: 'F_DepartmentId asc,F_CreatorTime desc',
+            gridComplete: function () {
+                var sort = 'F_DepartmentId asc,F_CreatorTime desc';
+                var re_page = $gridList.getGridParam('page');//获取返回的当前页
+                var re_rowNum = $gridList.getGridParam('rowNum');//获取每页数
+                var url = $('#btn_ExportCurrent').attr('href');
+                url = url.split('?', 1);
+                url += "?sidx=" + sort + "&sord=asc&rows=" + re_rowNum + "&page=" + re_page;
+                $('#btn_ExportCurrent').attr('href', url);
+            },
+            onPaging: function (pageBtn) {
+                var sort = 'F_DepartmentId asc,F_CreatorTime desc';
+                var re_page = $gridList.getGridParam('page');//获取返回的当前页
+                var re_rowNum = $gridList.getGridParam('rowNum');//获取每页数
+                var url = $('#btn_ExportCurrent').attr('href');
+                url = url.split('?', 1);
+                url += "?sidx=" + sort + "&sord=asc&rows=" + re_rowNum + "&page=" + re_page;
+                $('#btn_ExportCurrent').attr('href',url);
+            },
             viewrecords: true
         });
         $("#btn_search").click(function () {
@@ -197,10 +215,10 @@
                 </td>
                 <td>
                     <div class="btn-group">
-                        <a id="btn_ExportAll" href="/User/GetExportExcelUrl" class="btn btn-info dropdown-text"><i class="fa fa fa-file-excel-o"></i>导出Excel[当前]</a>
+                        <a id="btn_ExportCurrent" href="/User/GetExportExcelUrl" class="btn btn-info dropdown-text"><i class="fa fa fa-file-excel-o"></i>导出Excel[当前]</a>
                     </div>
                     <div class="btn-group">
-                        <a id="btn_ExportCurrent" href="/User/GetExportExcelUrl" class="btn btn-info dropdown-text"><i class="fa fa fa-file-excel-o"></i>导出Excel[全部]</a>
+                        <a id="btn_ExportAll" href="/User/GetExportExcelUrl" class="btn btn-info dropdown-text"><i class="fa fa fa-file-excel-o"></i>导出Excel[全部]</a>
                     </div>
                 </td>
             </tr>
