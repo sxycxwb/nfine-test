@@ -47,6 +47,7 @@
     <Compile Include="03 Entity\SystemManage\AreaEntity.cs" />
     <Compile Include="03 Entity\SystemManage\ModuleButtonEntity.cs" />
     <Compile Include="03 Entity\SystemManage\ModuleEntity.cs" />
+    <Compile Include="03 Entity\SystemManage\Test_Report2Entity.cs" />
     <Compile Include="03 Entity\SystemManage\RoleAuthorizeEntity.cs" />
     <Compile Include="03 Entity\SystemManage\UserLogOnEntity.cs" />
     <Compile Include="03 Entity\SystemManage\ItemsDetailEntity.cs" />
@@ -64,6 +65,7 @@
     <Compile Include="04 IRepository\SystemManage\IRoleRepository.cs" />
     <Compile Include="04 IRepository\SystemManage\IUserLogOnRepository.cs" />
     <Compile Include="04 IRepository\SystemManage\IUserRepository.cs" />
+    <Compile Include="04 IRepository\SystemManage\ITest_Report2Repository.cs" />
     <Compile Include="04 IRepository\SystemSecurity\IDbBackupRepository.cs" />
     <Compile Include="04 IRepository\SystemSecurity\IFilterIPRepository.cs" />
     <Compile Include="04 IRepository\SystemSecurity\ILogRepository.cs" />
