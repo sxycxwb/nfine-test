@@ -28,16 +28,6 @@ namespace NFine.Repository.SystemManage
         {
             using (var db = new RepositoryBase().BeginTrans())
             {
-                #region 初始化
-                foreach (var user in list)
-                {
-                    user.F_Id = Common.GuId();
-                    var LoginInfo = OperatorProvider.Provider.GetCurrent();
-                    if (LoginInfo != null)
-                        user.F_CreatorUserId = LoginInfo.UserId;
-                    user.F_CreatorTime = DateTime.Now;
-                } 
-                #endregion
                 db.Insert(list);
                 db.Commit();
             }

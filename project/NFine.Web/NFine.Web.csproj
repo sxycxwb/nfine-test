@@ -388,6 +388,23 @@
     <Content Include="Content\js\wdtree\images\tree\loading.gif" />
     <Content Include="Content\js\wdtree\tree.css" />
     <Content Include="Content\js\wdtree\tree.js" />
+    <Content Include="Content\js\webuploader-0.1.5\Uploader.swf" />
+    <Content Include="Content\js\webuploader-0.1.5\webuploader.css" />
+    <Content Include="Content\js\webuploader-0.1.5\webuploader.custom.js" />
+    <Content Include="Content\js\webuploader-0.1.5\webuploader.custom.min.js" />
+    <Content Include="Content\js\webuploader-0.1.5\webuploader.fis.js" />
+    <Content Include="Content\js\webuploader-0.1.5\webuploader.flashonly.js" />
+    <Content Include="Content\js\webuploader-0.1.5\webuploader.flashonly.min.js" />
+    <Content Include="Content\js\webuploader-0.1.5\webuploader.html5only.js" />
+    <Content Include="Content\js\webuploader-0.1.5\webuploader.html5only.min.js" />
+    <Content Include="Content\js\webuploader-0.1.5\webuploader.js" />
+    <Content Include="Content\js\webuploader-0.1.5\webuploader.min.js" />
+    <Content Include="Content\js\webuploader-0.1.5\webuploader.noimage.js" />
+    <Content Include="Content\js\webuploader-0.1.5\webuploader.noimage.min.js" />
+    <Content Include="Content\js\webuploader-0.1.5\webuploader.nolog.js" />
+    <Content Include="Content\js\webuploader-0.1.5\webuploader.nolog.min.js" />
+    <Content Include="Content\js\webuploader-0.1.5\webuploader.withoutimage.js" />
+    <Content Include="Content\js\webuploader-0.1.5\webuploader.withoutimage.min.js" />
     <Content Include="Content\js\wizard\wizard.css" />
     <Content Include="Content\js\wizard\wizard.js" />
     <Content Include="Content\js\framework-clientdata.js" />
@@ -629,6 +646,10 @@
     <Content Include="Areas\ReportManage\Views\Highcharts\Sample7.cshtml" />
     <Content Include="Areas\ReportManage\Views\Highcharts\Sample8.cshtml" />
     <Content Include="Areas\ReportManage\Views\Highcharts\Sample9.cshtml" />
+    <Content Include="Content\js\webuploader-0.1.5\README.md" />
+    <Content Include="Areas\SystemManage\Views\User\UploadIndex.cshtml" />
+    <Content Include="Areas\SystemManage\Views\Task\Form.cshtml" />
+    <Content Include="Areas\SystemManage\Views\Task\Index.cshtml" />
     <None Include="Properties\PublishProfiles\NFine.Framework.Release.pubxml" />
   </ItemGroup>
   <PropertyGroup>

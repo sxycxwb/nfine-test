@@ -60,6 +60,7 @@
     <Compile Include="SystemManage\ModuleApp.cs" />
     <Compile Include="SystemManage\ModuleButtonApp.cs" />
     <Compile Include="SystemManage\AreaApp.cs" />
+    <Compile Include="SystemManage\TaskApp.cs" />
     <Compile Include="SystemManage\OrganizeApp.cs" />
     <Compile Include="SystemManage\ReportDemoApp.cs" />
     <Compile Include="SystemManage\RoleApp.cs" />

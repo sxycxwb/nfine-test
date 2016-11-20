@@ -14,6 +14,7 @@ using NPOI.SS.Util;
 using System.Data;
 using System.IO;
 using System.Reflection;
+using NPOI.SS.Formula.Functions;
 
 namespace NFine.Code.Excel
 {
@@ -23,9 +24,120 @@ namespace NFine.Code.Excel
         private string _sheetName;
         private string _filePath;
 
-        #region 为DataTable设置表头
+        #region DataTable转List
 
-        private void SetDataTableHeader<T>(DataTable table) where T : class, new()
+        public static IList<T> ConvertTo<T>(IList<DataRow> rows)
+        {
+            IList<T> list = null;
+            if (rows != null)
+            {
+                list = new List<T>();
+                foreach (DataRow row in rows)
+                {
+                    T item = CreateItem<T>(row);
+                    list.Add(item);
+                }
+            }
+            return list;
+        }
+
+        public IList<T> ConvertTo<T>(DataTable table, bool isChangeHeader = false) where T : class, new()
+        {
+            if (table == null)
+                return null;
+            if (isChangeHeader)
+                SetDataTableHeader<T>(table, false);
+
+            List<DataRow> rows = new List<DataRow>();
+            foreach (DataRow row in table.Rows)
+                rows.Add(row);
+
+            return ConvertTo<T>(rows);
+        }
+
+        //Convert DataRow into T Object
+        public static T CreateItem<T>(DataRow row)
+        {
+            string columnName;
+            T obj = default(T);
+            if (row != null)
+            {
+                obj = Activator.CreateInstance<T>();
+                foreach (DataColumn column in row.Table.Columns)
+                {
+                    columnName = column.ColumnName;
+                    //Get property with same columnName
+                    PropertyInfo prop = obj.GetType().GetProperty(columnName);
+                    try
+                    {
+                        //Get value for the column
+                        object value = (row[columnName].GetType() == typeof(DBNull))
+                        ? null : row[columnName];
+                        //Set property value
+                        if (prop.CanWrite) //判断其是否可写
+                        {
+                            //判断时间类型
+                            if (prop.PropertyType.FullName.Contains("System.DateTime"))
+                            {
+                                if (string.IsNullOrEmpty(value.ToString()))
+                                    value = null;
+                                else
+                                    value = Convert.ToDateTime(value);
+                            }
+                            prop.SetValue(obj, value, null);
+                        }
+
+                    }
+                    catch
+                    {
+                        throw;
+                        //Catch whatever here
+                    }
+                }
+            }
+            return obj;
+        }
+
+        public IList<T> ConvertToModel<T>(DataTable dt, bool isChangeHeader = false) where T : class, new()
+        {
+            if (isChangeHeader)
+                SetDataTableHeader<T>(dt, false);
+
+            IList<T> ts = new List<T>();// 定义集合
+            Type type = typeof(T); // 获得此模型的类型
+            string tempName = "";
+            foreach (DataRow dr in dt.Rows)
+            {
+                T t = new T();
+                PropertyInfo[] propertys = t.GetType().GetProperties();// 获得此模型的公共属性
+                foreach (PropertyInfo pi in propertys)
+                {
+                    tempName = pi.Name;
+                    if (dt.Columns.Contains(tempName))
+                    {
+                        if (!pi.CanWrite) continue;
+                        object value = dr[tempName];
+                        if (value != DBNull.Value)
+                        {
+                            pi.SetValue(t, value, null);
+                        }
+                    }
+                }
+                ts.Add(t);
+            }
+            return ts;
+        }
+
+        #endregion
+
+        #region 为DataTable设置表头
+        /// <summary>
+        /// 为DataTable设置表头
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="table">表格</param>
+        /// <param name="LetterConvertDescripiton">是否由字母转描述</param>
+        private void SetDataTableHeader<T>(DataTable table, bool LetterConvertDescripiton = true) where T : class, new()
         {
             #region 得到实体字段字典escription
 
@@ -38,18 +150,13 @@ namespace NFine.Code.Excel
                 var v = (DescriptionAttribute[])item.GetCustomAttributes(typeof(DescriptionAttribute), false);
                 var descriptionName = v[0].Description;
                 var fieldName = item.Name;
-                dic.Add(fieldName, descriptionName);
-            }
-
-            #endregion
-
-            #region 为DataTable设置表头
-
-            if (table.Assert())
-            {
-                foreach (var item in dic)
+                if (LetterConvertDescripiton) //字母转描述
                 {
-                    table.Columns[item.Key].ColumnName = item.Value;
+                    table.Columns[fieldName].ColumnName = descriptionName;
+                }
+                else//描述转字母
+                {
+                    table.Columns[descriptionName].ColumnName = fieldName;
                 }
             }
 

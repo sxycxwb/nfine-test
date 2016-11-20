@@ -78,7 +78,7 @@
                 var url = $('#btn_ExportCurrent').attr('href');
                 url = url.split('?', 1);
                 url += "?sidx=" + sort + "&sord=asc&rows=" + re_rowNum + "&page=" + re_page;
-                $('#btn_ExportCurrent').attr('href',url);
+                $('#btn_ExportCurrent').attr('href', url);
             },
             viewrecords: true
         });
@@ -176,6 +176,20 @@
             }
         });
     }
+    function UploadExcel()
+    {
+        $.modalOpen({
+            id: "Form",
+            title: "上传用户数据Excel",
+            url: "/SystemManage/User/UploadIndex",
+            width: "700px",
+            height: "510px",
+            callBack: function (iframeId) {
+                top.frames[iframeId].submitForm();
+            }
+        });
+    }
+
 </script>
 
 <div class="topPanel">
@@ -220,7 +234,14 @@
                     <div class="btn-group">
                         <a id="btn_ExportAll" href="/User/GetExportExcelUrl" class="btn btn-info dropdown-text"><i class="fa fa fa-file-excel-o"></i>导出Excel[全部]</a>
                     </div>
+                    <div class="btn-group">
+                        <a id="btn_UploadExcel" class="btn btn-info dropdown-text" onclick="UploadExcel()"><i class="fa fa fa-file-excel-o"></i>上传Excel</a>
+                    </div>
                 </td>
+                
+            </tr>
+            <tr>
+                
             </tr>
         </table>
     </div>

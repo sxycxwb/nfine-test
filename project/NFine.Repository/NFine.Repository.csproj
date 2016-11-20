@@ -45,6 +45,7 @@
     <Compile Include="SystemManage\ModuleButtonRepository.cs" />
     <Compile Include="SystemManage\ModuleRepository.cs" />
     <Compile Include="SystemManage\AreaRepository.cs" />
+    <Compile Include="SystemManage\TaskRepository.cs" />
     <Compile Include="SystemManage\Test_Report2Repository.cs" />
     <Compile Include="SystemManage\OrganizeRepository.cs" />
     <Compile Include="SystemManage\RoleRepository.cs" />

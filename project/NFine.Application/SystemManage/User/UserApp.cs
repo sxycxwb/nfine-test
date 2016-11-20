@@ -23,7 +23,7 @@ namespace NFine.Application.SystemManage
         #region Excel 导入、导出Demo
 
         #region 导出
-        public List<UserExcelOutPut> GetExcelList(Pagination pagination, string keyword="")
+        public List<UserExcelOutPut> GetExcelList(Pagination pagination, string keyword = "")
         {
             var expression = ExtLinq.True<UserEntity>();
             if (!string.IsNullOrEmpty(keyword))
@@ -34,7 +34,7 @@ namespace NFine.Application.SystemManage
             }
             expression = expression.And(t => t.F_Account != "admin");
             var list = service.FindList(expression, pagination);
-            AutoMapper.Mapper.Initialize(t=>t.CreateMap<UserEntity, UserExcelOutPut>());
+            AutoMapper.Mapper.Initialize(t => t.CreateMap<UserEntity, UserExcelOutPut>());
             return AutoMapper.Mapper.Map<List<UserExcelOutPut>>(list);
         }
 
@@ -56,9 +56,18 @@ namespace NFine.Application.SystemManage
 
         #region 导入
 
-        public void GetExcelList(List<UserExcelInPut> list)
+        public void ExcelImport(List<UserExcelInPut> list)
         {
+            AutoMapper.Mapper.Initialize(t => t.CreateMap<UserExcelInPut, UserEntity>());
             var userList = AutoMapper.Mapper.Map<List<UserEntity>>(list);
+            var datetimeNow = DateTime.Now;
+            var currentUserId = OperatorProvider.Provider.GetCurrent().UserId;
+            userList.ForEach(t =>
+            {
+                t.F_Id = Guid.NewGuid().ToString();
+                t.F_CreatorTime = datetimeNow;
+                t.F_CreatorUserId = currentUserId;
+            });
             service.BatchSumitForm(userList);
         }
 

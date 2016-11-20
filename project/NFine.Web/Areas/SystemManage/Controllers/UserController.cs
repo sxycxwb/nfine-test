@@ -14,6 +14,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.IO;
 using System.Linq;
+using System.Web;
 using System.Web.Mvc;
 using System.Web.WebSockets;
 using NFine.Code.Excel;
@@ -27,6 +28,39 @@ namespace NFine.Web.Areas.SystemManage.Controllers
         private UserLogOnApp userLogOnApp = new UserLogOnApp();
 
         #region Excel导入、导出
+        [HttpGet]
+        public ActionResult UploadIndex()
+        {
+            return View();
+        }
+
+
+        public ActionResult UploadExcel(HttpPostedFileBase file)
+        {
+            if (file == null)
+            {
+                return Content("没有文件！", "text/plain");
+            }
+            var rootPath = Request.MapPath("~/Upload/Excel/User");
+            if (!Directory.Exists(rootPath))
+            {
+                Directory.CreateDirectory(rootPath); //不存在就创建文件夹
+            }
+            var fileName = Path.Combine(rootPath, Path.GetFileName(file.FileName));
+            try
+            {
+                file.SaveAs(fileName);
+                DataTable dtData = ExcelHelper.Import(fileName, 1);
+                var list = new NPOIExcel().ConvertTo<UserExcelInPut>(dtData, true).ToList();
+                userApp.ExcelImport(list);
+
+                return Content("上传成功！", "text/plain");
+            }
+            catch(Exception ex)
+            {
+                return Content("上传异常 ！", "text/plain");
+            }
+        }
 
         /// <summary>
         /// 获得导出的url并导出
@@ -46,7 +80,7 @@ namespace NFine.Web.Areas.SystemManage.Controllers
                 list = userApp.GetExcelList(pagination);
             }
             //类型转换（将List转化为DataTable）
-            var exportDt=list.ToDataTable(rec => new object[] { list });
+            var exportDt = list.ToDataTable(rec => new object[] { list });
             var excelTitle = "用户数据";
             var rootPath = AppDomain.CurrentDomain.BaseDirectory;
             rootPath = Path.Combine(rootPath, "DownLoad", "Excel", "User");
