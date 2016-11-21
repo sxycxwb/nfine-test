@@ -16,6 +16,9 @@ namespace NFine.Web.Controllers
     [HandlerLogin]
     public class HomeController : Controller
     {
+        private TaskApp taskApp = new TaskApp();
+
+
         [HttpGet]
         public ActionResult Index()
         {
@@ -25,6 +28,11 @@ namespace NFine.Web.Controllers
         [HttpGet]
         public ActionResult Default()
         {
+            int unDoCount = taskApp.GetCount("0");//未完成数
+            int doCount = taskApp.GetCount("1");//已完成数
+            ViewBag.UnDoCount = unDoCount;
+            ViewBag.DoCount = doCount;
+
             return View();
         }
         [HttpGet]

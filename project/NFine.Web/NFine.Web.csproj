@@ -147,6 +147,7 @@
     <Compile Include="Areas\SystemManage\Controllers\ModuleController.cs" />
     <Compile Include="Areas\SystemManage\Controllers\OrganizeController.cs" />
     <Compile Include="Areas\SystemManage\Controllers\RoleAuthorizeController.cs" />
+    <Compile Include="Areas\SystemManage\Controllers\TaskController.cs" />
     <Compile Include="Areas\SystemManage\Controllers\RoleController.cs" />
     <Compile Include="Areas\SystemManage\Controllers\UserController.cs" />
     <Compile Include="Areas\SystemManage\Controllers\ItemsTypeController.cs" />
@@ -305,6 +306,7 @@
     <Content Include="Content\js\jquery-ui\jquery-ui.min.css" />
     <Content Include="Content\js\jquery-ui\jquery-ui.min.js" />
     <Content Include="Content\js\jquery\jquery-2.1.1.min.js" />
+    <Content Include="Content\js\jsrender.min.js" />
     <Content Include="Content\js\layout\jquery.layout.js" />
     <Content Include="Content\js\loading\pace.min.js" />
     <Content Include="Content\js\md5\jquery.md5.js" />

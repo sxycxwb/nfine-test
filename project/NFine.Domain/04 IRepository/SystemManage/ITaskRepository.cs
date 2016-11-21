@@ -12,6 +12,7 @@ using NFine.Domain.Entity.SystemManage;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -22,7 +23,9 @@ namespace NFine.Domain.IRepository.SystemManage
 	/// </summary>	
 	public interface ITaskRepository:IRepositoryBase<TaskEntity>
 	{
+       int GetTaskCount(Expression<Func<TaskViewModel, bool>> predicate);
 
+       IQueryable<TaskViewModel> GetTaskList(Expression<Func<TaskViewModel, bool>> predicate);
     }
 }
 
