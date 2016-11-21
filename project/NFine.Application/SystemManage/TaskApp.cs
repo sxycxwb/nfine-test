@@ -35,9 +35,7 @@ namespace NFine.Application.SystemManage
         public List<TaskViewModel> GetList(Pagination page = null, string status = "")
         {
             var expression = GetExpression(status);
-            var list = service.GetTaskList(expression);
-            if (page != null && page.page == 0 && page.rows != 0)//分页处理
-                list.Skip(page.rows * (page.page - 1)).Take(page.rows).AsQueryable();
+            var list = service.GetTaskList(page,expression);          
             return list.ToList();
         }
 
@@ -69,11 +67,14 @@ namespace NFine.Application.SystemManage
             }
             else //否则只查询自己
             {
-                expression.And(t => t.F_CreatorUserId == currentUserId);
+                expression= expression.And(t => t.F_CreatorUserId == currentUserId);
             }
 
             if (!string.IsNullOrEmpty(status))
-                expression.And(t => t.F_Status == Convert.ToInt32(status));
+            {
+                var f_status = Convert.ToInt32(status);
+                expression = expression.And(t => t.F_Status == f_status);
+            }
             return expression;
         }
 
@@ -97,6 +98,7 @@ namespace NFine.Application.SystemManage
             else
             {
                 entity.Create();
+                entity.F_Status = 0;
                 service.Insert(entity);
             }
         }

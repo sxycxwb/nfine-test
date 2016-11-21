@@ -15,6 +15,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
+using NFine.Code;
 
 namespace NFine.Domain.IRepository.SystemManage
 {	
@@ -25,7 +26,7 @@ namespace NFine.Domain.IRepository.SystemManage
 	{
        int GetTaskCount(Expression<Func<TaskViewModel, bool>> predicate);
 
-       IQueryable<TaskViewModel> GetTaskList(Expression<Func<TaskViewModel, bool>> predicate);
+        List<TaskViewModel> GetTaskList(Pagination page,Expression<Func<TaskViewModel, bool>> predicate);
     }
 }
 

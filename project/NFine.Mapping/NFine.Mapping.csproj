@@ -54,6 +54,7 @@
     <Compile Include="SystemManage\ItemsMap.cs" />
     <Compile Include="SystemManage\ModuleButtonMap.cs" />
     <Compile Include="SystemManage\ModuleMap.cs" />
+    <Compile Include="SystemManage\TaskViewMapping.cs" />
     <Compile Include="SystemManage\TaskMapping.cs" />
     <Compile Include="SystemManage\Test_Report2Map.cs" />
     <Compile Include="SystemManage\OrganizeMap.cs" />

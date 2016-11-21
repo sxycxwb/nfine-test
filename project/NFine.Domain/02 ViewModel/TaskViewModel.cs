@@ -15,7 +15,7 @@ namespace NFine.Domain.Entity.SystemManage
         public string F_LastModifyUserId { get; set; }
         public DateTime? F_DeleteTime { get; set; }
         public string F_DeleteUserId { get; set; }
-        public int F_Status { get; set; }
+        public int? F_Status { get; set; }
         public string F_DepartmentId { get; set; }
         public string F_DepartmentName { get; set; }
     }
