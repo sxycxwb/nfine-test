@@ -2,12 +2,17 @@
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Index.cshtml";
 }
+
 <script>
     $(function () {
         var status = $.request("status");
         if (status)
             $("#F_Status option[value='" + status + "']").attr("selected", true);
         gridList();
+
+        $('#F_Status').change(function() {
+            status = $('#F_Status').val();
+        });
     });
     function gridList() {
         var status = $.request("status");
@@ -27,7 +32,8 @@
         });
         $("#btn_search").click(function () {
             $gridList.jqGrid('setGridParam', {
-                postData: { keyword: $("#txt_keyword").val() },
+                url: "/SystemManage/Task/GetGridJson?status=" + $("#F_Status").val(),
+                postData: { }
             }).trigger('reloadGrid');
         });
     }
@@ -81,13 +87,14 @@
         <script>$('.toolbar').authorizeButton()</script>
     </div>
     <div class="search">
-        <div class="input-group">
-            <select id="F_Status" name="F_Status" class="form-control">
+        <div class="btn-group">
+            任务状态：
+            <select id="F_Status" name="F_Status">
                 <option value="">全部</option>
                 <option value="0">未完成</option>
                 <option value="1">已完成</option>
             </select>
-            <span class="input-group-btn">
+            <span style="margin-left: 10px;">
                 <button id="btn_search" type="button" class="btn  btn-primary"><i class="fa fa-search"></i></button>
             </span>
         </div>
