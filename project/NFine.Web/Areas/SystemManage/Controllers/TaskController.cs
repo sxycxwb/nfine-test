@@ -17,7 +17,6 @@ namespace NFine.Web.Areas.SystemManage.Controllers
     {
         private TaskApp taskApp = new TaskApp();
 
-        [HttpGet]
         [HandlerAjaxOnly]
         public ActionResult GetGridJson(Pagination page,string status)
         {

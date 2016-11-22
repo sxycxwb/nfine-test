@@ -10,19 +10,76 @@
     <link href="~/Content/css/framework-theme.css" rel="stylesheet" />
     <script src="~/Content/js/jsrender.min.js"></script>
     <script src="~/Content/js/charts/Chart.js"></script>
+    <script src="~/Content/js/indextab.js"></script>
+
     <script>
+        $.loading = function (bool, text) {
+            var $loadingpage = top.$("#loadingPage");
+            var $loadingtext = $loadingpage.find('.loading-content');
+            if (bool) {
+                $loadingpage.show();
+            } else {
+                if ($loadingtext.attr('istableloading') == undefined) {
+                    $loadingpage.hide();
+                }
+            }
+            if (!!text) {
+                $loadingtext.html(text);
+            } else {
+                $loadingtext.html("数据加载中，请稍后…");
+            }
+            $loadingtext.css("left", (top.$('body').width() - $loadingtext.width()) / 2 - 50);
+            $loadingtext.css("top", (top.$('body').height() - $loadingtext.height()) / 2);
+        }
+
+        $.modalOpen = function (options) {
+            var defaults = {
+                id: null,
+                title: '系统窗口',
+                width: "100px",
+                height: "100px",
+                url: '',
+                shade: 0.3,
+                btn: ['确认', '关闭'],
+                btnclass: ['btn btn-primary', 'btn btn-danger'],
+                callBack: null
+            };
+            var options = $.extend(defaults, options);
+            var _width = top.$(window).width() > parseInt(options.width.replace('px', '')) ? options.width : top.$(window).width() + 'px';
+            var _height = top.$(window).height() > parseInt(options.height.replace('px', '')) ? options.height : top.$(window).height() + 'px';
+            top.layer.open({
+                id: options.id,
+                type: 2,
+                shade: options.shade,
+                title: options.title,
+                fix: false,
+                area: [_width, _height],
+                content: options.url,
+                btn: options.btn,
+                btnclass: options.btnclass,
+                yes: function () {
+                    options.callBack(options.id)
+                }, cancel: function () {
+                    return true;
+                }
+            });
+        }
+
         $(function () {
             GetSalaryChart();
             GetLeaveChart();
 
             $.ajax({
                 url: "/SystemManage/Task/GetGridJson",
-                data: { rows: 8, page: 0,status:'1' },
+                data: { rows: 8, page: 0, status:'1' },
                 type: "post",
                 dataType: "json",
                 success: function (data) {
                     var html = $("#doTaskTemplate").render(data);
                     $("#doTaskUl").html(html);
+                    $('#doTaskUl a').click(function() {
+                        open_edit($(this).attr('id'));
+                    });
                 }
             });
 
@@ -34,9 +91,75 @@
                 success: function (data) {
                     var html = $("#unDoTaskTemplate").render(data);
                     $("#unDoTaskUl").html(html);
+                    $('#unDoTaskUl a').click(function () {
+                        open_edit($(this).attr('id'));
+                    });
                 }
             });
+
+            
+
+            //绑定点击事件
+            $('#unDoJobDiv').on('click', function() {
+                AddTab(this);
+            });
+            $('#doJobDiv').on('click', function() {
+                AddTab(this);
+            });
+              
         });
+
+        function AddTab(obj) {
+            $("#header-nav>ul>li.open", window.parent.document).removeClass("open");
+            var dataUrl = $(obj).attr('href');
+            var menuName = "任务管理";
+            var flag = true;
+            if (dataUrl == undefined || $.trim(dataUrl).length == 0) {
+                return false;
+            }
+            $('.menuTab', window.parent.document).each(function () {
+                if ($(this).data('id') == dataUrl) {
+                    if (!$(this).hasClass('active')) {
+                        $(this).addClass('active').siblings('.menuTab').removeClass('active');
+                        $.nfinetab.scrollToTab(this);
+                        $('.mainContent .NFine_iframe', window.parent.document).each(function () {
+                            if ($(this).data('id') == dataUrl) {
+                                $(this).show().siblings('.NFine_iframe', window.parent.document).hide();
+                                return false;
+                            }
+                        });
+                    }
+                    flag = false;
+                    return false;
+                }
+            });
+            var dataId = '';
+            if (flag) {
+                var str = '<a href="javascript:;" class="active menuTab" data-id="' + dataUrl + '">' + menuName + ' <i class="fa fa-remove"></i></a>';
+                $('.menuTab', window.parent.document).removeClass('active');
+                var str1 = '<iframe class="NFine_iframe" id="iframe' + dataId + '" name="iframe' + dataId + '"  width="100%" height="100%" src="' + dataUrl + '" frameborder="0" data-id="' + dataUrl + '" seamless></iframe>';
+                $('.mainContent', window.parent.document).find('iframe.NFine_iframe').hide();
+                $('.mainContent', window.parent.document).append(str1);
+                $.loading(true);
+                $('.mainContent iframe:visible', window.parent.document).load(function () {
+                    $.loading(false);
+                });
+                $('.menuTabs .page-tabs-content', window.parent.document).append(str);
+                //$.nfinetab.scrollToTab($('.menuTab.active'), window.parent.document);
+            }
+        }
+
+        function open_edit(keyValue) {
+            $.modalOpen({
+                id: "Form",
+                title: "修改任务",
+                url: "/SystemManage/Task/Form?keyValue=" + keyValue,
+                width: "550px",
+                height: "570px",
+                btn: null
+            });
+        }
+
         function GetSalaryChart() {
             var randomScalingFactor = function () { return Math.round(Math.random() * 100) };
             var lineChartData = {
@@ -77,30 +200,30 @@
             var c_value = randomScalingFactor();
             var d_value = randomScalingFactor();
             var doughnutData = [
-	            {
-	                value: a_value,
-	                color: "#F7464A",
-	                highlight: "#FF5A5E",
-	                label: "事假"
-	            },
-	            {
-	                value: b_value,
-	                color: "#46BFBD",
-	                highlight: "#5AD3D1",
-	                label: "病假"
-	            },
-	            {
-	                value: c_value,
-	                color: "#FDB45C",
-	                highlight: "#FFC870",
-	                label: "公休假"
-	            },
-	            {
-	                value: d_value,
-	                color: "#949FB1",
-	                highlight: "#A8B3C5",
-	                label: "调休假"
-	            }
+                {
+                    value: a_value,
+                    color: "#F7464A",
+                    highlight: "#FF5A5E",
+                    label: "事假"
+                },
+                {
+                    value: b_value,
+                    color: "#46BFBD",
+                    highlight: "#5AD3D1",
+                    label: "病假"
+                },
+                {
+                    value: c_value,
+                    color: "#FDB45C",
+                    highlight: "#FFC870",
+                    label: "公休假"
+                },
+                {
+                    value: d_value,
+                    color: "#949FB1",
+                    highlight: "#A8B3C5",
+                    label: "调休假"
+                }
             ];
             var ctx = document.getElementById("leavechart").getContext("2d");
             window.myDoughnut = new Chart(ctx).Doughnut(doughnutData, { responsive: false });
@@ -123,7 +246,7 @@
                 </div>
                 <div class="panel-body">
                     <div class="dashboard-stats">
-                        <div class="dashboard-stats-item" style="background-color: #fc8675;">
+                        <div id="unDoJobDiv" class="dashboard-stats-item" style="background-color: #fc8675;" href="/SystemManage/Task/Index?status=0">
                             <h2 class="m-top-none">@ViewBag.UnDoCount</h2>
                             <h5>未完成工作</h5>
                             <div class="stat-icon">
@@ -132,7 +255,7 @@
                         </div>
                     </div>
                     <div class="dashboard-stats">
-                        <div class="dashboard-stats-item" style="background-color: #6bafbd;">
+                        <div id="doJobDiv" class="dashboard-stats-item" style="background-color: #6bafbd;" href="/SystemManage/Task/Index?status=1">
                             <h2 class="m-top-none">@ViewBag.DoCount</h2>
                             <h5>已完成工作</h5>
                             <div class="stat-icon">
@@ -225,10 +348,10 @@
         </div>
     </div>
     <script id="unDoTaskTemplate" type="text/x-jsrender">
-        <li><a href="#">{{:F_TaskDescription}}</a><span class="time">{{:F_CreateTime}}</span></li>
+        <li><a href="#" id="{{:F_Id}}">{{:F_TaskDescription}}</a><span class="time">{{:F_CreateTime}}</span></li>
     </script>
     <script id="doTaskTemplate" type="text/x-jsrender">
-        <li><a href="#">{{:F_TaskDescription}}</a><span class="time">{{:F_CreateTime}}</span></li>
+        <li><a href="#" id="{{:F_Id}}">{{:F_TaskDescription}}</a><span class="time">{{:F_CreateTime}}</span></li>
     </script>
     <style>
         #copyrightcontent {
